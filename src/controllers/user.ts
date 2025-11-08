@@ -15,17 +15,20 @@ export const signUp = async (req: Request, res: Response) => {
       password: hashedPassword,
     });
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id.toString());
     await user.save();
 
     return res
       .status(201)
       .json({ message: "User created successfully", token });
   } catch (error: any) {
-    // if error is due to duplicate email
+    console.log(error);
+
+    // duplicate key(email) error
     if (error.code === 11000)
       return res.status(400).json({ message: "Email already exists" });
 
+    // other errors
     return res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -36,18 +39,21 @@ export const signIn = async (req: Request, res: Response) => {
 
     const user = await User.findOne({ email });
     if (!user)
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res
+        .status(400)
+        .json({ message: "Account not found, please sign up" });
 
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid)
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({ message: "Incorrect password" });
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id.toString());
 
     return res
       .status(200)
       .json({ message: "User signed in successfully", token });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
