@@ -192,11 +192,18 @@ export const updatePost = async (req: Request, res: Response) => {
 
     await post.save();
 
+    if (status) {
+      return res.status(200).json({
+        message:
+          post.status === "published"
+            ? "Post published!"
+            : "Post saved as draft!",
+        post,
+      });
+    }
+
     return res.status(200).json({
-      message:
-        post.status === "published"
-          ? "Post updated and published successfully"
-          : "Draft updated successfully",
+      message: "Post updated!",
       post,
     });
   } catch (error) {
