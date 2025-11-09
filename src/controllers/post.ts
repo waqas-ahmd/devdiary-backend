@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Post from "../models/post.js";
-import { getReadingTime } from "../utils/posts.js";
+import { createHandle, getReadingTime } from "../utils/posts.js";
 
 export const createPost = async (req: Request, res: Response) => {
   try {
@@ -8,7 +8,7 @@ export const createPost = async (req: Request, res: Response) => {
     const author = req.user._id;
 
     const readingTime = getReadingTime(content);
-    const baseHandle = title.toLowerCase().replace(/ /g, "-");
+    const baseHandle = createHandle(title);
     let handle = baseHandle;
     let counter = 1;
 
