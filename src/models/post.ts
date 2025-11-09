@@ -21,7 +21,6 @@ const postSchema = new mongoose.Schema(
   }
 );
 
-postSchema.index({ handle: 1 }, { unique: true });
 postSchema.index({ title: 1 });
 postSchema.index({ status: 1 });
 postSchema.index({ author: 1 });
@@ -32,7 +31,5 @@ postSchema.index({
 });
 
 const Post = mongoose.model("Post", postSchema);
-
-Post.syncIndexes();
 
 export default Post;

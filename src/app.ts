@@ -10,13 +10,13 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.get("/", (req, res) => {
-  res.send("Blogs Application API");
-});
 
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  return res.json({ message: "Welcome to DevDiary API" });
+});
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 

@@ -1,0 +1,39 @@
+service: dev-diary
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  region: ap-south-1
+  timeout: 15
+  stage: ""
+
+functions:
+  app:
+    handler: dist/lambda.handler
+    events:
+      - httpApi:
+          path: /
+          method: ANY
+      - httpApi:
+          path: /{proxy+}
+          method: ANY
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 8000
+
+package:
+  excludeDevDependencies: true
+  exclude:
+    - src/**
+    - public/**
+    - test/**
+    - tests/**
+    - .github/**
+    - .git/**
+    - .serverless/**
